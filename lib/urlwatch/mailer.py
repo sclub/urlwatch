@@ -37,11 +37,14 @@ except ImportError:
 from email.mime.text import MIMEText
 from email.utils import formatdate
 
-def send(smtp_server, from_email, to_email, subject, body,
+def send(smtp_server, from_email, from_name, to_email, subject, body,
          tls=False, auth=False):
     msg = MIMEText(body, 'plain', 'utf_8')
     msg['Subject'] = subject
-    msg['From'] = from_email
+    if from_name:
+         msg['From'] = '"{}" <{}>'.format(from_name,from_email)
+    else:
+         msg['From'] = from_email
     msg['To'] = to_email
     msg['Date'] = formatdate()
 

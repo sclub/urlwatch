@@ -161,6 +161,7 @@ if __name__ == '__main__':
     parser.add_option('-e', '--display-errors', action='store_true', dest='display_errors', help='Include HTTP errors (404, etc..) in the output')
     parser.add_option('-t', '--mailto', dest='email', metavar='ADDRESS', help='Send results via e-mail to ADDRESS')
     parser.add_option('-f', '--mailfrom', dest='email_from', metavar='ADDRESS', help='Alternate From: address for e-mail (--mailto)')
+    parser.add_option('-n', '--mailname', dest='email_from_name', metavar='ADDRESS', help='Alternate From name: name that is shown in e-mail header (--mailto)')
     parser.add_option('-s', '--smtp', dest='email_smtp', metavar='SERVER', help='SMTP server for e-mail (--mailto)')
     parser.add_option('-S', '--subject', dest='email_subject', metavar='SUBJECT', help='Alternate Subject: for e-mail (--mailto)')
     parser.add_option('-p', '--pass', dest='password', action='store_true', help='Interactively set password for SMTP')
@@ -195,6 +196,7 @@ if __name__ == '__main__':
         enable_emails = True
         email_smtp_server = options.email_smtp or 'localhost'
         email_sender_address = options.email_from or options.email
+        email_sender_name = options.email_from_name
         email_receiver_address = options.email
         email_subject = options.email_subject or 'Changes detected ({count})'
         email_tls = options.tls
@@ -406,7 +408,7 @@ if __name__ == '__main__':
                     'count': len(summary),
                 }
 
-                mailer.send(email_smtp_server, email_sender_address,
+                mailer.send(email_smtp_server, email_sender_address, email_sender_name,
                         email_receiver_address,  email_subject.format(**subject_args),
                         short_summary + '\n' + '\n'.join(details),
                         auth=email_auth, tls=email_tls)
